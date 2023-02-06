@@ -6,6 +6,7 @@ let query = "";
 let newsContainer = document.querySelector(".newsCards")
 
 
+let API_URL = `https://newsapi.org/v2/everything?q=${query}&apiKey=${API_KEY}`
 let API_URL_SPORTS = `https://newsapi.org/v2/everything?q=sports&apiKey=${API_KEY}`
 let API_URL_FASHION = `https://newsapi.org/v2/everything?q=fashion&apiKey=${API_KEY}`
 let API_URL_TECHNOLOGY = `https://newsapi.org/v2/everything?q=technology&apiKey=${API_KEY}`
@@ -20,6 +21,15 @@ let technology = document.getElementById("technology")
 let health = document.getElementById("health")
 let games = document.getElementById("games")
 
+let prev = document.querySelector("#prev")
+let next = document.querySelector("#next")
+
+next.addEventListener("click", (e)=>{
+    // fetchNews("all", `https://newsapi.org/v2/everything?q=${e.}&apiKey=${API_KEY}`)
+    console.log(`https://newsapi.org/v2/everything?q=${e.target}&apiKey=${API_KEY}`)
+})
+
+
 const fetchNews = async (query, API_URL) => {
     let res = await fetch(API_URL)
     let data = await res.json()
@@ -30,26 +40,24 @@ const fetchNews = async (query, API_URL) => {
     let articlesPerPage = 18
     let totalPages = Math.ceil(data.totalResults / articlesPerPage)
     let startPoint = 0
-    let endPoint = data.totalResults.length - 1;
+    let endPoint = articlesPerPage
     let newsStr = ""
 
-    let prev = document.querySelector("#prev")
-    let next = document.querySelector("#next")
-
-    for (let i = startPoint; i < articlesPerPage; i++) {
+    for (let i = startPoint; i < endPoint; i++) {
         let newsCardHTML = `
-        <div class="card m-2" style="width: 18rem;">
-        <img src="${data.articles[i].urlToImage == null ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" : data.articles[i].urlToImage}" class="card-img-top" alt="${data.articles[i].title} image">
-        <div class="card-body">
-        <h5 class="card-title">${data.articles[i].title}</h5>
-        <p class="card-text">${data.articles[i].description}</p>
-        <a href="${data.articles[i].url}" class="btn btn-primary">Read More...</a>
-        </div>
+        <div data-aos="fade-up" data-aos-duration="1000" class="card m-2 py-2 col-md-4" style="width: 18rem;">
+            <img style="border-radius: 5px" height="200" src="${data.articles[i].urlToImage == null ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" : data.articles[i].urlToImage}" class="card-img-top" alt="${data.articles[i].title} image">
+            <div class="card-body">
+                <h5 class="card-title">${data.articles[i].title}</h5>
+                <p class="card-text">${data.articles[i].description.slice(0,50)}...</p>
+                <a target="_blank" href="${data.articles[i].url}" class="btn btn-primary">Read More...</a>
+            </div>
         </div>
         `
         newsStr = newsStr + newsCardHTML
         newsContainer.innerHTML = newsStr
     }
+    
 }
 
         function homeFunc(e){
@@ -131,7 +139,7 @@ const fetchNews = async (query, API_URL) => {
             e.preventDefault()
             query = searchBox.value
 
-            let API_URL = `https://newsapi.org/v2/everything?q=${query}&apiKey=${API_KEY}`
+            
 
             let newsContainer = document.querySelector(".newsCards")
 
@@ -147,7 +155,7 @@ const fetchNews = async (query, API_URL) => {
                 let articlesPerPage = 18
                 let totalPages = Math.ceil(data.totalResults / articlesPerPage)
                 let startPoint = 0
-                let endPoint = data.totalResults.length - 1;
+                // let endPoint = data.totalResults.length - 1;
                 let newsStr = ""
 
                 let prev = document.querySelector("#prev")
@@ -155,12 +163,12 @@ const fetchNews = async (query, API_URL) => {
 
                 for (let i = startPoint; i < articlesPerPage; i++) {
                     let newsCardHTML = `
-                    <div class="card m-2" style="width: 18rem;">
-                    <img src="${data.articles[i].urlToImage == null ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" : data.articles[i].urlToImage}" class="card-img-top" alt="${data.articles[i].title} image">
+                    <div data-aos="fade-up" data-aos-duration="1000" class="card m-2 py-2 col-md-4" style="width: 18rem;">
+                    <img style="border-radius: 5px" height="200" src="${data.articles[i].urlToImage == null ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png" : data.articles[i].urlToImage}" class="card-img-top" alt="${data.articles[i].title} image">
                     <div class="card-body">
                     <h5 class="card-title">${data.articles[i].title}</h5>
-                    <p class="card-text">${data.articles[i].description}</p>
-                    <a href="${data.articles[i].url}" class="btn btn-primary">Read More...</a>
+                    <p class="card-text">${data.articles[i].description.slice(0,50)}...</p>
+                    <a target="_blank" href="${data.articles[i].url}" class="btn btn-primary">Read More...</a>
                     </div>
                     </div>
                     `
